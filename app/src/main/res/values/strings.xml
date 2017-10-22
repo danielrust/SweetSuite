@@ -1,0 +1,5 @@
+<resources>
+  <string name="app_name">SweetSuite</string>
+  <string name="app_logo_img">SweetSuite</string>
+  <string name="ingredient_string_list_item">· 2 tsp Nutella</string>
+</resources>
