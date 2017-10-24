@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@drawable/bottom_nav_background"
+    android:padding="0dp"
+
+    >
+
+  <FrameLayout
+      android:id="@+id/back_nav"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:clickable="true"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+
+      app:layout_constraintTop_toTopOf="parent"
+      >
+    <ImageView
+        android:id="@+id/back_nav_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+        />
+  </FrameLayout>
+  <FrameLayout
+      android:id="@+id/forward_nav"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:clickable="true"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+
+        />
+  </FrameLayout>
+  <TextView
+      android:id="@+id/nav_recipe_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:background="@null"
+      android:contentDescription="Name of Recipe"
+      android:text="TextView"
+      android:textColor="@android:color/black"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toStartOf="@+id/forward_nav"
+      app:layout_constraintStart_toEndOf="@+id/back_nav"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Nutella Pie"
+      />
+  <TextView
+      android:id="@+id/nav_recipe_step"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:background="@null"
+      android:text="TextView"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/forward_nav"
+      app:layout_constraintStart_toEndOf="@+id/back_nav"
+      app:layout_constraintTop_toBottomOf="@+id/nav_recipe_title"
+      />
+</android.support.constraint.ConstraintLayout>

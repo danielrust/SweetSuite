@@ -2,4 +2,8 @@
   <string name="app_name">SweetSuite</string>
   <string name="app_logo_img">SweetSuite</string>
   <string name="ingredient_string_list_item">· 2 tsp Nutella</string>
+  <string name="title_activity_main2">Main2Activity</string>
+  <string name="title_home">Home</string>
+  <string name="title_dashboard">Dashboard</string>
+  <string name="title_notifications">Notifications</string>
 </resources>

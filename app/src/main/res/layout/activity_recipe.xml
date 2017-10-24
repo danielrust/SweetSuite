@@ -1,80 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-  <android.support.constraint.ConstraintLayout
-
+  <include layout="@layout/toolbar_main"/>
+  <FrameLayout
+      android:id="@+id/frag_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:focusableInTouchMode="true"
+      android:layout_height="match_parent"
+      android:layout_marginTop="?attr/actionBarSize"
       >
-    <include
-        layout="@layout/toolbar_main"
-        android:id="@+id/include"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="Name Of Dessert"
-        android:fontFamily="@font/playfairdisplay_regular"
-        android:lineSpacingExtra="-20sp"
 
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="Nutella Pie With A Dash Of Cinnamon"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="60sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        tools:text="Nutella Pie With A Dash Of Something"
-        />
-    <TextView
-        android:id="@+id/servings_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="14dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:contentDescription="Amount Of Servings"
-        android:text="SERVINGS: 8"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:text="SERVINGS: 8"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ingredient_recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/servings_tv"
-        tools:listitem="@layout/ingredient_list_item"
-        />
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ingredient_recyclerView"
-        />
-  </android.support.constraint.ConstraintLayout>
-</android.support.v4.widget.NestedScrollView>
+  </FrameLayout>
+  <include
+      layout="@layout/recipe_menu_layout"
+      />
+
+
+</RelativeLayout>
+

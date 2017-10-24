@@ -10,6 +10,7 @@ import android.util.Log;
 import com.rustwebdev.sweetsuite.data.Recipe;
 import com.rustwebdev.sweetsuite.data.RecipeService;
 import com.rustwebdev.sweetsuite.di.Injector;
+import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
 import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
   private RecipesAdapter.RecipeItemListener itemListener = new RecipesAdapter.RecipeItemListener() {
     @Override public void onRecipeClick(Recipe recipe) {
       Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-      //intent.putExtra("movie", movie);
+      intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
       //ActivityOptions options =
       //    ActivityOptions.makeSceneTransitionAnimation(MoviesActivity.this, imgView,
       //        Constants.MOVIE_IMG_TRANS_SHARED_ELEMENT);
