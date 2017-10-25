@@ -64,7 +64,6 @@ public class RecipeActivity extends AppCompatActivity
 
       @Override public void onPageSelected(int position) {
         super.onPageSelected(position);
-        currentPosition = position;
         Log.d(LOG_TAG, "CurrentPositionOnSelect: " + currentPosition);
         BaseRecipeFragment oldFrag =
             (BaseRecipeFragment) mRecipePagerAdapter.getRegisteredFragment(currentPosition);

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +46,7 @@ public class RecipeFragment extends BaseRecipeFragment
   private static MediaSessionCompat mMediaSession;
   private PlaybackStateCompat.Builder mStateBuilder;
   @BindView(R.id.step_name) TextView stepName;
+  @BindView(R.id.placeholder_logo) ImageView placeholderImg;
   private Unbinder unbinder;
 
   public static RecipeFragment newInstance(Step step, int position) {
@@ -67,39 +69,12 @@ public class RecipeFragment extends BaseRecipeFragment
     stepName.setText(step.getDescription());
 
     if (!step.getVideoURL().isEmpty()) {
-      initializeMediaSession();
       initializePlayer(Uri.parse(step.getVideoURL()));
     } else {
       mPlayerView.setVisibility(View.INVISIBLE);
+      placeholderImg.setVisibility(View.VISIBLE);
     }
     return view;
-  }
-
-  private void initializeMediaSession() {
-
-    // Create a MediaSessionCompat.
-    mMediaSession = new MediaSessionCompat(getActivity(), LOG_TAG);
-
-    // Enable callbacks from MediaButtons and TransportControls.
-    mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-        | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-    // Do not let MediaButtons restart the player when the app is not visible.
-    mMediaSession.setMediaButtonReceiver(null);
-
-    // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-    mStateBuilder = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_PLAY
-        | PlaybackStateCompat.ACTION_PAUSE
-        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-        | PlaybackStateCompat.ACTION_PLAY_PAUSE);
-
-    mMediaSession.setPlaybackState(mStateBuilder.build());
-
-    // MySessionCallback has methods that handle callbacks from a media controller.
-    mMediaSession.setCallback(new RecipeFragment.MySessionCallback());
-
-    // Start the Media Session since the activity is active.
-    mMediaSession.setActive(true);
   }
 
   private void initializePlayer(Uri mediaUri) {
@@ -119,16 +94,15 @@ public class RecipeFragment extends BaseRecipeFragment
           new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent),
               new DefaultExtractorsFactory(), null, null);
       mExoPlayer.prepare(mediaSource);
-      mExoPlayer.setPlayWhenReady(true);
+      //mExoPlayer.setPlayWhenReady(true);
       mPlayerView.hideController();
-
     }
   }
 
   @Override public void onResumeFragment() {
-    if (mExoPlayer != null) {
-      mExoPlayer.setPlayWhenReady(true);
-    }
+    //if (mExoPlayer != null) {
+    //  mExoPlayer.setPlayWhenReady(true);
+    //}
   }
 
   @Override public void onPauseFragment() {
@@ -153,6 +127,13 @@ public class RecipeFragment extends BaseRecipeFragment
     mExoPlayer = null;
   }
 
+  @Override public void onPause() {
+    super.onPause();
+    if (mExoPlayer != null) {
+      mExoPlayer.setPlayWhenReady(false);
+    }
+  }
+
   @Override public void onTimelineChanged(Timeline timeline, Object manifest) {
 
   }
@@ -167,13 +148,7 @@ public class RecipeFragment extends BaseRecipeFragment
   }
 
   @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-    if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-      mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(),
-          1f);
-    } else if ((playbackState == ExoPlayer.STATE_READY)) {
-      mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
-    }
-    mMediaSession.setPlaybackState(mStateBuilder.build());
+
   }
 
   @Override public void onPlayerError(ExoPlaybackException error) {

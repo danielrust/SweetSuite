@@ -77,7 +77,6 @@ public class RecipeBaseFragment extends BaseRecipeFragment
         new IngredientsAdapter(getActivity(), ingredients, this);
     ingredientRv.setAdapter(ingredientsAdapter);
     ingredientRv.setNestedScrollingEnabled(false);
-    initializeMediaSession();
 
     initializePlayer(Uri.parse(recipe.getSteps().get(0).getVideoURL()));
     return view;
@@ -87,31 +86,11 @@ public class RecipeBaseFragment extends BaseRecipeFragment
 
   }
 
-  private void initializeMediaSession() {
-
-    // Create a MediaSessionCompat.
-    mMediaSession = new MediaSessionCompat(getActivity(), LOG_TAG);
-
-    // Enable callbacks from MediaButtons and TransportControls.
-    mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-        | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-    // Do not let MediaButtons restart the player when the app is not visible.
-    mMediaSession.setMediaButtonReceiver(null);
-
-    // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-    mStateBuilder = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_PLAY
-        | PlaybackStateCompat.ACTION_PAUSE
-        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-        | PlaybackStateCompat.ACTION_PLAY_PAUSE);
-
-    mMediaSession.setPlaybackState(mStateBuilder.build());
-
-    // MySessionCallback has methods that handle callbacks from a media controller.
-    mMediaSession.setCallback(new MySessionCallback());
-
-    // Start the Media Session since the activity is active.
-    mMediaSession.setActive(true);
+  @Override public void onPause() {
+    super.onPause();
+    if (mExoPlayer != null) {
+      mExoPlayer.setPlayWhenReady(false);
+    }
   }
 
   @Override public void onDestroyView() {
@@ -133,14 +112,13 @@ public class RecipeBaseFragment extends BaseRecipeFragment
       mExoPlayer.addListener(this);
 
       // Prepare the MediaSource.
-      String userAgent = Util.getUserAgent(getActivity(), "ClassicalMusicQuiz");
+      String userAgent = Util.getUserAgent(getActivity(), "SweetSuite");
       MediaSource mediaSource =
           new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent),
               new DefaultExtractorsFactory(), null, null);
       mExoPlayer.prepare(mediaSource);
-      mExoPlayer.setPlayWhenReady(true);
+      //mExoPlayer.setPlayWhenReady(true);
       mPlayerView.hideController();
-
     }
   }
 
@@ -154,6 +132,8 @@ public class RecipeBaseFragment extends BaseRecipeFragment
     mExoPlayer = null;
   }
 
+
+
   public static Fragment newInstance(Step step, Recipe recipe, int position) {
     RecipeBaseFragment recipeBaseFragment = new RecipeBaseFragment();
     Bundle args = new Bundle();
@@ -165,13 +145,16 @@ public class RecipeBaseFragment extends BaseRecipeFragment
   }
 
   @Override public void onResumeFragment() {
-    if (mExoPlayer != null) {
-      mExoPlayer.setPlayWhenReady(true);
-    }
+    //if (mExoPlayer != null) {
+    //  mExoPlayer.setPlayWhenReady(true);
+    //}
   }
 
   @Override public void onPauseFragment() {
-    mExoPlayer.setPlayWhenReady(false);
+    Log.d(LOG_TAG, "BaseFragment was Paulse");
+    if (mExoPlayer != null) {
+      mExoPlayer.setPlayWhenReady(false);
+    }
   }
 
   private class MySessionCallback extends MediaSessionCompat.Callback {
@@ -202,13 +185,7 @@ public class RecipeBaseFragment extends BaseRecipeFragment
   }
 
   @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-    if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-      mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, mExoPlayer.getCurrentPosition(),
-          1f);
-    } else if ((playbackState == ExoPlayer.STATE_READY)) {
-      mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, mExoPlayer.getCurrentPosition(), 1f);
-    }
-    mMediaSession.setPlaybackState(mStateBuilder.build());
+
   }
 
   @Override public void onPlayerError(ExoPlaybackException error) {

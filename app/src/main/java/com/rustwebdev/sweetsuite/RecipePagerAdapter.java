@@ -31,6 +31,7 @@ public class RecipePagerAdapter extends FragmentStatePagerAdapter {
     return fragment;
   }
 
+
   @Override public int getCount() {
     return steps.size();
   }
