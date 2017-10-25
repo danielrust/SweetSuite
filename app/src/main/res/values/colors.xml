@@ -3,6 +3,5 @@
   <color name="colorPrimary">#009688</color>
   <color name="colorPrimaryDark">#80CBC4</color>
   <color name="colorAccent">#FF4081</color>
-  <color name="recycler_view_divider_color">#5580CBC4</color>
   <color name="white">#FFFFFF</color>
 </resources>

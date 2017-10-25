@@ -1,7 +1,5 @@
 package com.rustwebdev.sweetsuite;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +10,11 @@ import butterknife.ButterKnife;
 import com.rustwebdev.sweetsuite.data.Recipe;
 import java.util.List;
 
-/**
- * Created by flanhelsinki on 10/21/17.
- */
-
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
-  private List<Recipe> recipes;
-  private RecipeItemListener itemListener;
-  private Context context;
-  private Drawable placeholder;
+  private final List<Recipe> recipes;
+  private final RecipeItemListener itemListener;
 
-  public RecipesAdapter(Context context, List<Recipe> recipes, RecipeItemListener itemListener) {
-    this.context = context;
+  public RecipesAdapter(List<Recipe> recipes, RecipeItemListener itemListener) {
     this.recipes = recipes;
     this.itemListener = itemListener;
   }
@@ -45,7 +36,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
   public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.recipe_list_view_name) TextView recipeNameTv;
-    RecipeItemListener itemListener;
+    final RecipeItemListener itemListener;
 
     public ViewHolder(View itemView, RecipeItemListener itemListener) {
       super(itemView);

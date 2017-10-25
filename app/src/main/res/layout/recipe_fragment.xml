@@ -8,7 +8,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="?attr/actionBarSize"
-    android:background="?android:attr/windowBackground"
     >
   <android.support.constraint.ConstraintLayout
 
@@ -20,11 +19,12 @@
         android:id="@+id/placeholder_logo"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:contentDescription="@string/placeholder_logo_content_desc"
         android:src="@drawable/sweet_suite_logo_icon"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
         />
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/playerView"
@@ -40,21 +40,20 @@
         android:id="@+id/step_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="3dp"
-        android:contentDescription="Step Description"
+        android:contentDescription="@string/step_name_content_desc"
+        android:paddingBottom="100dp"
         android:paddingEnd="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingStart="10dp"
-        android:text="Make sure you turn the oven off"
+        android:text="@string/step_name_placeholder_text"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playerView"
         tools:text="Fold in the eggs with the heavy cream till stiff peaks"
-        android:paddingBottom="100dp"
         />
 
   </android.support.constraint.ConstraintLayout>

@@ -2,8 +2,23 @@
   <string name="app_name">SweetSuite</string>
   <string name="app_logo_img">SweetSuite</string>
   <string name="ingredient_string_list_item">· 2 tsp Nutella</string>
-  <string name="title_activity_main2">Main2Activity</string>
-  <string name="title_home">Home</string>
-  <string name="title_dashboard">Dashboard</string>
-  <string name="title_notifications">Notifications</string>
+  <string name="back_nav_img_content_desc">Step Navigation Backwards</string>
+  <string name="forward_nav_img_content_desc">forward_nav_img</string>
+  <string name="recipe_name_content_desc">Name Of Dessert</string>
+  <string name="recipe_name_placeholder_text">Nutella Pie With A Dash Of Cinnamon</string>
+  <string name="servings_tv_content_desc">Amount Of Servings</string>
+  <string name="servings_tv_placeholder_text">SERVINGS: 8</string>
+  <string name="exo_prev_content_desc">ExoPlayer Previous Navigation</string>
+  <string name="exo_play_content_desc">ExoPlayer Play Navigation</string>
+  <string name="exo_pause_content_desc">ExoPlayer Pause Navigation</string>
+  <string name="placeholder_logo_content_desc">Step Placeholder Image</string>
+  <string name="step_name_content_desc">Step Description</string>
+  <string name="step_name_placeholder_text">Make sure you turn the oven off</string>
+  <string name="nav_recipe_title_content_desc">Name of Recipe</string>
+  <string name="nav_recipe_title_placeholder_text">Recipe Name</string>
+  <string name="nav_recipe_step_placeholder_text">1. Get This Dang Thing To Work</string>
+  <string name="ingredient_name_tv_text">· %1$s %2$s %3$s</string>
+  <string name="nav_recipe_tv_text">%1$d. %2$s</string>
+  <string name="servings_amount_tv">SERVINGS: %1$s</string>
+
 </resources>

@@ -11,9 +11,9 @@ import com.rustwebdev.sweetsuite.recipe.RecipeFragment;
 import java.util.ArrayList;
 
 public class RecipePagerAdapter extends FragmentStatePagerAdapter {
-  private Recipe recipe;
-  private ArrayList<Step> steps;
-  SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+  private final Recipe recipe;
+  private final ArrayList<Step> steps;
+  private final SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
   public RecipePagerAdapter(FragmentManager fm, Recipe recipe) {
     super(fm);
@@ -30,7 +30,6 @@ public class RecipePagerAdapter extends FragmentStatePagerAdapter {
     }
     return fragment;
   }
-
 
   @Override public int getCount() {
     return steps.size();

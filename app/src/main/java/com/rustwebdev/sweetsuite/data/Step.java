@@ -10,58 +10,30 @@ public class Step implements Parcelable {
 
   @SerializedName("id")
   @Expose
-  private Integer id;
+  private final Integer id;
   @SerializedName("shortDescription")
   @Expose
-  private String shortDescription;
+  private final String shortDescription;
   @SerializedName("description")
   @Expose
-  private String description;
+  private final String description;
   @SerializedName("videoURL")
   @Expose
-  private String videoURL;
+  private final String videoURL;
   @SerializedName("thumbnailURL")
   @Expose
-  private String thumbnailURL;
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
+  private final String thumbnailURL;
 
   public String getShortDescription() {
     return shortDescription;
-  }
-
-  public void setShortDescription(String shortDescription) {
-    this.shortDescription = shortDescription;
   }
 
   public String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public String getVideoURL() {
     return videoURL;
-  }
-
-  public void setVideoURL(String videoURL) {
-    this.videoURL = videoURL;
-  }
-
-  public String getThumbnailURL() {
-    return thumbnailURL;
-  }
-
-  public void setThumbnailURL(String thumbnailURL) {
-    this.thumbnailURL = thumbnailURL;
   }
 
   @Override public int describeContents() {
@@ -76,10 +48,7 @@ public class Step implements Parcelable {
     dest.writeString(this.thumbnailURL);
   }
 
-  public Step() {
-  }
-
-  protected Step(Parcel in) {
+  private Step(Parcel in) {
     this.id = (Integer) in.readValue(Integer.class.getClassLoader());
     this.shortDescription = in.readString();
     this.description = in.readString();

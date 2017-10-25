@@ -4,11 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,42 +36,38 @@ import com.rustwebdev.sweetsuite.data.Step;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
 import java.util.ArrayList;
 
-public class RecipeBaseFragment extends BaseRecipeFragment
-    implements IngredientsAdapter.IngredientItemListener, ExoPlayer.EventListener,
-    RecipeActivity.OnFragmentChangeState {
+@SuppressWarnings("WeakerAccess") public class RecipeBaseFragment extends BaseRecipeFragment
+    implements ExoPlayer.EventListener, RecipeActivity.OnFragmentChangeState {
   public static final String LOG_TAG = RecipeActivity.class.getSimpleName();
-  RecyclerView ingredientRv;
-  ArrayList<Ingredient> ingredients;
   private SimpleExoPlayer mExoPlayer;
   private SimpleExoPlayerView mPlayerView;
-  private static MediaSessionCompat mMediaSession;
-  private PlaybackStateCompat.Builder mStateBuilder;
-  private Recipe recipe;
   @BindView(R.id.recipe_name) TextView recipeName;
+  @BindView(R.id.servings_tv) TextView servingsAmount;
   private Unbinder unbinder;
-  public int fragNumber;
 
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.activity_recipe1, container, false);
+    View view = inflater.inflate(R.layout.recipe_base_fragment, container, false);
     unbinder = ButterKnife.bind(this, view);
-    recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
-    fragNumber = getArguments().getInt(Constants.FRAGMENT_TAG);
-    //recipeName.setText(recipe.getName());
+    Recipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
+    assert recipe != null;
     recipeName.setText(recipe.getName());
-    ingredientRv = view.findViewById(R.id.ingredient_recyclerView);
+    servingsAmount.setText(
+        getActivity().getString(R.string.servings_amount_tv, recipe.getServings()));
+    RecyclerView ingredientRv = view.findViewById(R.id.ingredient_recyclerView);
     mPlayerView = view.findViewById(R.id.playerView);
-
-    ((RecipeActivity) getActivity()).getSupportActionBar().setTitle("");
+    //noinspection ConstantConditions
     ((RecipeActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //noinspection ConstantConditions
+    ((RecipeActivity) getActivity()).getSupportActionBar().setTitle("");
+
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     ingredientRv.setLayoutManager(mLayoutManager);
-    ingredients = recipe.getIngredients();
+    ArrayList<Ingredient> ingredients = recipe.getIngredients();
 
-    IngredientsAdapter ingredientsAdapter =
-        new IngredientsAdapter(getActivity(), ingredients, this);
+    IngredientsAdapter ingredientsAdapter = new IngredientsAdapter(getActivity(), ingredients);
     ingredientRv.setAdapter(ingredientsAdapter);
     ingredientRv.setNestedScrollingEnabled(false);
 
@@ -82,8 +75,26 @@ public class RecipeBaseFragment extends BaseRecipeFragment
     return view;
   }
 
-  @Override public void onIngredientClick(Ingredient ingredient) {
+  private void initializePlayer(Uri mediaUri) {
+    if (mExoPlayer == null) {
+      TrackSelector trackSelector = new DefaultTrackSelector();
+      LoadControl loadControl = new DefaultLoadControl();
+      mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+      mPlayerView.setPlayer(mExoPlayer);
+      mExoPlayer.addListener(this);
+      String userAgent = Util.getUserAgent(getActivity(), "SweetSuite");
+      MediaSource mediaSource =
+          new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent),
+              new DefaultExtractorsFactory(), null, null);
+      mExoPlayer.prepare(mediaSource);
+      mPlayerView.hideController();
+    }
+  }
 
+  private void releasePlayer() {
+    mExoPlayer.stop();
+    mExoPlayer.release();
+    mExoPlayer = null;
   }
 
   @Override public void onPause() {
@@ -97,42 +108,7 @@ public class RecipeBaseFragment extends BaseRecipeFragment
     super.onDestroyView();
     unbinder.unbind();
     releasePlayer();
-    Log.d(LOG_TAG, "ViewDestroyed");
   }
-
-  private void initializePlayer(Uri mediaUri) {
-    if (mExoPlayer == null) {
-      // Create an instance of the ExoPlayer.
-      TrackSelector trackSelector = new DefaultTrackSelector();
-      LoadControl loadControl = new DefaultLoadControl();
-      mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-      mPlayerView.setPlayer(mExoPlayer);
-
-      // Set the ExoPlayer.EventListener to this activity.
-      mExoPlayer.addListener(this);
-
-      // Prepare the MediaSource.
-      String userAgent = Util.getUserAgent(getActivity(), "SweetSuite");
-      MediaSource mediaSource =
-          new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent),
-              new DefaultExtractorsFactory(), null, null);
-      mExoPlayer.prepare(mediaSource);
-      //mExoPlayer.setPlayWhenReady(true);
-      mPlayerView.hideController();
-    }
-  }
-
-  /**
-   * Release ExoPlayer.
-   */
-  private void releasePlayer() {
-    //mNotificationManager.cancelAll();
-    mExoPlayer.stop();
-    mExoPlayer.release();
-    mExoPlayer = null;
-  }
-
-
 
   public static Fragment newInstance(Step step, Recipe recipe, int position) {
     RecipeBaseFragment recipeBaseFragment = new RecipeBaseFragment();
@@ -144,30 +120,9 @@ public class RecipeBaseFragment extends BaseRecipeFragment
     return recipeBaseFragment;
   }
 
-  @Override public void onResumeFragment() {
-    //if (mExoPlayer != null) {
-    //  mExoPlayer.setPlayWhenReady(true);
-    //}
-  }
-
   @Override public void onPauseFragment() {
-    Log.d(LOG_TAG, "BaseFragment was Paulse");
     if (mExoPlayer != null) {
       mExoPlayer.setPlayWhenReady(false);
-    }
-  }
-
-  private class MySessionCallback extends MediaSessionCompat.Callback {
-    @Override public void onPlay() {
-      mExoPlayer.setPlayWhenReady(true);
-    }
-
-    @Override public void onPause() {
-      mExoPlayer.setPlayWhenReady(false);
-    }
-
-    @Override public void onSkipToPrevious() {
-      mExoPlayer.seekTo(0);
     }
   }
 
