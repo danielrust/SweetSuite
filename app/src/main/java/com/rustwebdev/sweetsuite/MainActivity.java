@@ -3,6 +3,8 @@ package com.rustwebdev.sweetsuite;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.util.Log;
 import com.rustwebdev.sweetsuite.data.Recipe;
 import com.rustwebdev.sweetsuite.data.RecipeService;
 import com.rustwebdev.sweetsuite.di.Injector;
+import com.rustwebdev.sweetsuite.idlingResource.RecipeIdlingResource;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
 import java.util.ArrayList;
 import retrofit2.Call;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
   private static final String LOG_TAG = MainActivity.class.getSimpleName();
   private ArrayList<Recipe> recipeArrayList;
   private RecyclerView recyclerView;
+  @Nullable private RecipeIdlingResource mSimpleIdlingResource;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -30,14 +34,29 @@ public class MainActivity extends AppCompatActivity {
     //noinspection ConstantConditions
     getSupportActionBar().setTitle("");
     recyclerView = findViewById(R.id.recipe_rv);
+    mSimpleIdlingResource = getIdlingResource();
+  }
 
+  @Override protected void onStart() {
+    super.onStart();
+    getRecipesFromJson();
+  }
+
+  private void getRecipesFromJson() {
+    if (mSimpleIdlingResource != null) {
+      mSimpleIdlingResource.setIdleState(false);
+    }
     RecipeService recipeService = Injector.provideMovieService();
     recipeService.getRecipes().enqueue(new Callback<ArrayList<Recipe>>() {
 
-      @Override
-      public void onResponse(@NonNull Call<ArrayList<Recipe>> call, @NonNull Response<ArrayList<Recipe>> response) {
+      @Override public void onResponse(@NonNull Call<ArrayList<Recipe>> call,
+          @NonNull Response<ArrayList<Recipe>> response) {
         recipeArrayList = response.body();
-        configureLayout();
+
+        if (mSimpleIdlingResource != null) {
+          mSimpleIdlingResource.setIdleState(true);
+          configureLayout();
+        }
       }
 
       @Override public void onFailure(@NonNull Call<ArrayList<Recipe>> call, @NonNull Throwable t) {
@@ -54,11 +73,23 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setAdapter(recipesAdapter);
   }
 
-  private final RecipesAdapter.RecipeItemListener itemListener = new RecipesAdapter.RecipeItemListener() {
-    @Override public void onRecipeClick(Recipe recipe) {
-      Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-      intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
-      startActivity(intent);
+  private final RecipesAdapter.RecipeItemListener itemListener =
+      new RecipesAdapter.RecipeItemListener() {
+        @Override public void onRecipeClick(Recipe recipe) {
+          Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+          intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
+          startActivity(intent);
+        }
+      };
+
+  @VisibleForTesting @NonNull public RecipeIdlingResource getIdlingResource() {
+    if (mSimpleIdlingResource != null) {
+      return mSimpleIdlingResource;
+    } else {
+      mSimpleIdlingResource = new RecipeIdlingResource();
+      return mSimpleIdlingResource;
     }
-  };
+  }
+
+
 }
