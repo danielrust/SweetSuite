@@ -7,22 +7,33 @@
 
   <application
       android:allowBackup="true"
+      android:fullBackupContent="@xml/backup_descriptor"
       android:icon="@drawable/sweet_suite_logo_icon"
       android:label="@string/app_name"
       android:roundIcon="@drawable/sweet_suite_logo_icon"
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
-      android:fullBackupContent="@xml/backup_descriptor"
       tools:ignore="GoogleAppIndexingWarning">
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
+
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
     <activity
         android:name=".recipe.RecipeActivity"
         android:parentActivityName=".MainActivity"/>
+
+    <receiver android:name=".RecipeWidgetProvider">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+
+      <meta-data
+          android:name="android.appwidget.provider"
+          android:resource="@xml/recipe_widget_provider_info"/>
+    </receiver>
   </application>
 
 </manifest>
