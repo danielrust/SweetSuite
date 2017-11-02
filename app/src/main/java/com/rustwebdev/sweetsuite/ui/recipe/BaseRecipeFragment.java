@@ -1,4 +1,4 @@
-package com.rustwebdev.sweetsuite;
+package com.rustwebdev.sweetsuite.ui.recipe;
 
 import android.support.v4.app.Fragment;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;

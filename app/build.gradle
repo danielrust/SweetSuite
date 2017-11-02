@@ -19,7 +19,18 @@ android {
     }
   }
 }
-
+ext {
+  // versions for libraries that multiple dependencies
+  supportLibVersion = '27.0.0'
+  archVersion = '1.0.3'
+  archVersionEA = '1.0.0-rc1'
+  playServicesVersion = '11.4.2'
+  daggerVersion = '2.12'
+  okhttpVersion = '3.9.0'
+  picassoVersion = '2.5.2'
+  rxjavaVersion = '2.0.1'
+  daggerVersion = '2.12'
+}
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile 'com.android.support:appcompat-v7:26.1.0'
@@ -42,4 +53,22 @@ dependencies {
   compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
   compile 'com.android.support:cardview-v7:26.1.0'
   compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
+
+  // Android Architecture Components
+  implementation "android.arch.lifecycle:runtime:$archVersion"
+  implementation "android.arch.lifecycle:extensions:$archVersionEA"
+  implementation "android.arch.persistence.room:runtime:$archVersionEA"
+  annotationProcessor "android.arch.lifecycle:compiler:$archVersionEA"
+  annotationProcessor "android.arch.persistence.room:compiler:$archVersionEA"
+
+  // SQLite Debugging
+  compile 'com.facebook.stetho:stetho:1.5.0'
+
+  // RXJava
+  compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+  compile "io.reactivex.rxjava2:rxandroid:$rxjavaVersion"
+
+  // Dagger 2
+  implementation "com.google.dagger:dagger:${daggerVersion}"
+  annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 }

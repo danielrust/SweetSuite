@@ -1,4 +1,4 @@
-package com.rustwebdev.sweetsuite;
+package com.rustwebdev.sweetsuite.ui.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+import com.rustwebdev.sweetsuite.R;
+import com.rustwebdev.sweetsuite.ui.recipes.MainActivity;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 

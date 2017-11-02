@@ -11,16 +11,16 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.rustwebdev.sweetsuite.BaseRecipeFragment;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
+import com.rustwebdev.sweetsuite.ui.recipe.BaseRecipeFragment;
 import com.rustwebdev.sweetsuite.Constants;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.RecipePagerAdapter;
-import com.rustwebdev.sweetsuite.data.Recipe;
+import com.rustwebdev.sweetsuite.ui.recipe.RecipePagerAdapter;
 
 @SuppressWarnings("WeakerAccess") public class RecipeActivity extends AppCompatActivity {
 
   public static final String LOG_TAG = RecipeActivity.class.getSimpleName();
-  private Recipe recipe;
+  private DtoRecipe recipe;
   @BindView(R.id.nav_recipe_step) TextView navRecipeStep;
   @BindView(R.id.nav_recipe_title) TextView navRecipeName;
   @BindView(R.id.pager) ViewPager mViewPager;
@@ -41,12 +41,12 @@ import com.rustwebdev.sweetsuite.data.Recipe;
     }
     navRecipeName.setText(recipe.getName());
     navRecipeStep.setText(this.getString(R.string.nav_recipe_tv_text, currentPosition,
-        recipe.getSteps().get(currentPosition).getShortDescription()));
+        recipe.getDtoSteps().get(currentPosition).getShortDescription()));
     mRecipePagerAdapter = new RecipePagerAdapter(getSupportFragmentManager(), recipe);
     mViewPager.setAdapter(mRecipePagerAdapter);
     if (mViewPager.getCurrentItem() == 0) {
       backNavBtn.setVisibility(View.INVISIBLE);
-    } else if (mViewPager.getCurrentItem() == recipe.getSteps().size()) {
+    } else if (mViewPager.getCurrentItem() == recipe.getDtoSteps().size()) {
       forwardNavBtn.setVisibility(View.INVISIBLE);
       backNavBtn.setVisibility(View.VISIBLE);
     } else {
@@ -71,7 +71,7 @@ import com.rustwebdev.sweetsuite.data.Recipe;
 
         if (position == 0) {
           backNavBtn.setVisibility(View.INVISIBLE);
-        } else if (position == recipe.getSteps().size() - 1) {
+        } else if (position == recipe.getDtoSteps().size() - 1) {
           forwardNavBtn.setVisibility(View.INVISIBLE);
           backNavBtn.setVisibility(View.VISIBLE);
         } else {
@@ -79,7 +79,7 @@ import com.rustwebdev.sweetsuite.data.Recipe;
           forwardNavBtn.setVisibility(View.VISIBLE);
         }
         navRecipeStep.setText(getString(R.string.nav_recipe_tv_text, currentPosition,
-            recipe.getSteps().get(position).getShortDescription()));
+            recipe.getDtoSteps().get(position).getShortDescription()));
       }
     });
     Toolbar toolbar = findViewById(R.id.toolbar_main);
@@ -92,7 +92,7 @@ import com.rustwebdev.sweetsuite.data.Recipe;
 
   private void changeMenuPosition(int position) {
     navRecipeStep.setText(getString(R.string.nav_recipe_tv_text, currentPosition,
-        recipe.getSteps().get(position).getShortDescription()));
+        recipe.getDtoSteps().get(position).getShortDescription()));
   }
 
   @OnClick(R.id.forward_nav) public void forwardFragment() {

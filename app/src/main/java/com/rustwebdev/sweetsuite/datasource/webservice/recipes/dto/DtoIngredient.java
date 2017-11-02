@@ -1,11 +1,11 @@
-package com.rustwebdev.sweetsuite.data;
+package com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Ingredient implements Parcelable {
+public class DtoIngredient implements Parcelable {
 
   @SerializedName("quantity") @Expose private final String quantity;
   @SerializedName("measure") @Expose private final String measure;
@@ -33,20 +33,20 @@ public class Ingredient implements Parcelable {
     dest.writeString(this.ingredient);
   }
 
-  private Ingredient(Parcel in) {
+  private DtoIngredient(Parcel in) {
     this.quantity = in.readString();
     this.measure = in.readString();
     this.ingredient = in.readString();
   }
 
-  public static final Parcelable.Creator<Ingredient> CREATOR =
-      new Parcelable.Creator<Ingredient>() {
-        @Override public Ingredient createFromParcel(Parcel source) {
-          return new Ingredient(source);
+  public static final Parcelable.Creator<DtoIngredient> CREATOR =
+      new Parcelable.Creator<DtoIngredient>() {
+        @Override public DtoIngredient createFromParcel(Parcel source) {
+          return new DtoIngredient(source);
         }
 
-        @Override public Ingredient[] newArray(int size) {
-          return new Ingredient[size];
+        @Override public DtoIngredient[] newArray(int size) {
+          return new DtoIngredient[size];
         }
       };
 }

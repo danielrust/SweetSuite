@@ -1,12 +1,12 @@
 
-package com.rustwebdev.sweetsuite.data;
+package com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Step implements Parcelable {
+public class DtoStep implements Parcelable {
 
   @SerializedName("id")
   @Expose
@@ -23,6 +23,14 @@ public class Step implements Parcelable {
   @SerializedName("thumbnailURL")
   @Expose
   private final String thumbnailURL;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public String getThumbnailURL() {
+    return thumbnailURL;
+  }
 
   public String getShortDescription() {
     return shortDescription;
@@ -48,7 +56,7 @@ public class Step implements Parcelable {
     dest.writeString(this.thumbnailURL);
   }
 
-  private Step(Parcel in) {
+  private DtoStep(Parcel in) {
     this.id = (Integer) in.readValue(Integer.class.getClassLoader());
     this.shortDescription = in.readString();
     this.description = in.readString();
@@ -56,13 +64,13 @@ public class Step implements Parcelable {
     this.thumbnailURL = in.readString();
   }
 
-  public static final Parcelable.Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
-    @Override public Step createFromParcel(Parcel source) {
-      return new Step(source);
+  public static final Parcelable.Creator<DtoStep> CREATOR = new Parcelable.Creator<DtoStep>() {
+    @Override public DtoStep createFromParcel(Parcel source) {
+      return new DtoStep(source);
     }
 
-    @Override public Step[] newArray(int size) {
-      return new Step[size];
+    @Override public DtoStep[] newArray(int size) {
+      return new DtoStep[size];
     }
   };
 }

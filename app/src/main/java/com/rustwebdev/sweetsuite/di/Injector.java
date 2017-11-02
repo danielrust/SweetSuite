@@ -1,28 +1,20 @@
 package com.rustwebdev.sweetsuite.di;
 
-import com.rustwebdev.sweetsuite.Constants;
-import com.rustwebdev.sweetsuite.data.RecipeService;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.app.Application;
 
 public class Injector {
+  // AppComponent may need to be init() from either App, Service or Receiver and must be the same instance (leave as AppComponent?)
+  private static AppComponent appComponent;
 
-  private static Retrofit provideRetrofit() {
-    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-
-    OkHttpClient client = new OkHttpClient.Builder().addInterceptor(logging).build();
-
-    return new Retrofit.Builder().baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build();
+  public static void init(Application app) {
+    if (appComponent == null) {
+      appComponent = DaggerAppComponent.builder().appModule(new AppModule(app)).build();
+    }
   }
 
-  public static RecipeService provideMovieService() {
-    return provideRetrofit().create(RecipeService.class);
+  public static AppComponent get() throws IllegalStateException {
+    return appComponent;
   }
+
 }

@@ -28,10 +28,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.rustwebdev.sweetsuite.BaseRecipeFragment;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoStep;
+import com.rustwebdev.sweetsuite.ui.recipe.BaseRecipeFragment;
 import com.rustwebdev.sweetsuite.Constants;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.data.Step;
 
 @SuppressWarnings("WeakerAccess") public class RecipeFragment extends BaseRecipeFragment
     implements RecipeActivity.OnFragmentChangeState, ExoPlayer.EventListener {
@@ -42,10 +42,10 @@ import com.rustwebdev.sweetsuite.data.Step;
   @BindView(R.id.placeholder_logo) ImageView placeholderImg;
   private Unbinder unbinder;
 
-  public static RecipeFragment newInstance(Step step, int position) {
+  public static RecipeFragment newInstance(DtoStep dtoStep, int position) {
     Bundle args = new Bundle();
     RecipeFragment fragment = new RecipeFragment();
-    args.putParcelable(Constants.RECIPE_FRAGMENT_PARCELABLE, step);
+    args.putParcelable(Constants.RECIPE_FRAGMENT_PARCELABLE, dtoStep);
     args.putInt(Constants.FRAGMENT_TAG, position);
     fragment.setArguments(args);
     return fragment;
@@ -56,13 +56,13 @@ import com.rustwebdev.sweetsuite.data.Step;
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.recipe_fragment, container, false);
     unbinder = ButterKnife.bind(this, view);
-    Step step = getArguments().getParcelable(Constants.RECIPE_FRAGMENT_PARCELABLE);
+    DtoStep dtoStep = getArguments().getParcelable(Constants.RECIPE_FRAGMENT_PARCELABLE);
     mPlayerView = view.findViewById(R.id.playerView);
-    assert step != null;
-    stepName.setText(step.getDescription());
+    assert dtoStep != null;
+    stepName.setText(dtoStep.getDescription());
 
-    if (!step.getVideoURL().isEmpty()) {
-      initializePlayer(Uri.parse(step.getVideoURL()));
+    if (!dtoStep.getVideoURL().isEmpty()) {
+      initializePlayer(Uri.parse(dtoStep.getVideoURL()));
     } else {
       mPlayerView.setVisibility(View.INVISIBLE);
       placeholderImg.setVisibility(View.VISIBLE);

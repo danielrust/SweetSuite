@@ -1,4 +1,4 @@
-package com.rustwebdev.sweetsuite;
+package com.rustwebdev.sweetsuite.ui.recipes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,20 +10,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import com.rustwebdev.sweetsuite.data.Recipe;
-import com.rustwebdev.sweetsuite.data.RecipeService;
-import com.rustwebdev.sweetsuite.di.Injector;
+import com.rustwebdev.sweetsuite.App;
+import com.rustwebdev.sweetsuite.Constants;
+import com.rustwebdev.sweetsuite.R;
+import com.rustwebdev.sweetsuite.datasource.database.main.MainDatabase;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.RecipeService;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
 import com.rustwebdev.sweetsuite.idlingResource.RecipeIdlingResource;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
 import java.util.ArrayList;
+import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
   private static final String LOG_TAG = MainActivity.class.getSimpleName();
-  private ArrayList<Recipe> recipeArrayList;
+  private ArrayList<DtoRecipe> recipeArrayList;
   private RecyclerView recyclerView;
+  @Inject RecipeService recipeService;
+  @Inject MainDatabase database;
+  @Inject RecipesPresenter recipesPresenter;
   @Nullable private RecipeIdlingResource mSimpleIdlingResource;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +38,26 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     Toolbar toolbar = findViewById(R.id.toolbar_main);
     setSupportActionBar(toolbar);
-    //noinspection ConstantConditions
     getSupportActionBar().setTitle("");
     recyclerView = findViewById(R.id.recipe_rv);
     mSimpleIdlingResource = getIdlingResource();
+    ((App) getApplication()).getComponent().inject(this);
   }
 
   @Override protected void onStart() {
     super.onStart();
-    getRecipesFromJson();
+    recipesPresenter.getRecipesFromWebservice();
+
   }
 
   private void getRecipesFromJson() {
     if (mSimpleIdlingResource != null) {
       mSimpleIdlingResource.setIdleState(false);
     }
-    RecipeService recipeService = Injector.provideMovieService();
-    recipeService.getRecipes().enqueue(new Callback<ArrayList<Recipe>>() {
+    recipeService.getRecipes().enqueue(new Callback<ArrayList<DtoRecipe>>() {
 
-      @Override public void onResponse(@NonNull Call<ArrayList<Recipe>> call,
-          @NonNull Response<ArrayList<Recipe>> response) {
+      @Override public void onResponse(@NonNull Call<ArrayList<DtoRecipe>> call,
+          @NonNull Response<ArrayList<DtoRecipe>> response) {
         recipeArrayList = response.body();
 
         if (mSimpleIdlingResource != null) {
@@ -59,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         }
       }
 
-      @Override public void onFailure(@NonNull Call<ArrayList<Recipe>> call, @NonNull Throwable t) {
+      @Override
+      public void onFailure(@NonNull Call<ArrayList<DtoRecipe>> call, @NonNull Throwable t) {
         Log.d(LOG_TAG, "Retrofit has failed. " + t);
       }
     });
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
   private final RecipesAdapter.RecipeItemListener itemListener =
       new RecipesAdapter.RecipeItemListener() {
-        @Override public void onRecipeClick(Recipe recipe) {
+        @Override public void onRecipeClick(DtoRecipe recipe) {
           Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
           intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
           startActivity(intent);
@@ -90,6 +98,4 @@ public class MainActivity extends AppCompatActivity {
       return mSimpleIdlingResource;
     }
   }
-
-
 }

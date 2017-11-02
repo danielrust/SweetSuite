@@ -1,38 +1,38 @@
-package com.rustwebdev.sweetsuite;
+package com.rustwebdev.sweetsuite.ui.recipe;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
-import com.rustwebdev.sweetsuite.data.Recipe;
-import com.rustwebdev.sweetsuite.data.Step;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoStep;
 import com.rustwebdev.sweetsuite.recipe.RecipeFragment;
 import java.util.ArrayList;
 
 public class RecipePagerAdapter extends FragmentStatePagerAdapter {
-  private final Recipe recipe;
-  private final ArrayList<Step> steps;
+  private final DtoRecipe recipe;
+  private final ArrayList<DtoStep> dtoSteps;
   private final SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-  public RecipePagerAdapter(FragmentManager fm, Recipe recipe) {
+  public RecipePagerAdapter(FragmentManager fm, DtoRecipe recipe) {
     super(fm);
-    this.steps = (ArrayList<Step>) recipe.getSteps();
+    this.dtoSteps = (ArrayList<DtoStep>) recipe.getDtoSteps();
     this.recipe = recipe;
   }
 
   @Override public Fragment getItem(int position) {
     Fragment fragment;
     if (position == 0) {
-      fragment = RecipeBaseFragment.newInstance(steps.get(position), recipe, position);
+      fragment = RecipeBaseFragment.newInstance(dtoSteps.get(position), recipe, position);
     } else {
-      fragment = RecipeFragment.newInstance(steps.get(position), position);
+      fragment = RecipeFragment.newInstance(dtoSteps.get(position), position);
     }
     return fragment;
   }
 
   @Override public int getCount() {
-    return steps.size();
+    return dtoSteps.size();
   }
 
   @Override public Object instantiateItem(ViewGroup container, int position) {

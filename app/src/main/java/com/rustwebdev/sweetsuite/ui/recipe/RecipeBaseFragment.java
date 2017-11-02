@@ -1,4 +1,4 @@
-package com.rustwebdev.sweetsuite;
+package com.rustwebdev.sweetsuite.ui.recipe;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,9 +30,11 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.rustwebdev.sweetsuite.data.Ingredient;
-import com.rustwebdev.sweetsuite.data.Recipe;
-import com.rustwebdev.sweetsuite.data.Step;
+import com.rustwebdev.sweetsuite.Constants;
+import com.rustwebdev.sweetsuite.R;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoIngredient;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoStep;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ import java.util.ArrayList;
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.recipe_base_fragment, container, false);
     unbinder = ButterKnife.bind(this, view);
-    Recipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
+    DtoRecipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
     assert recipe != null;
     recipeName.setText(recipe.getName());
     servingsAmount.setText(
@@ -65,13 +67,13 @@ import java.util.ArrayList;
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     ingredientRv.setLayoutManager(mLayoutManager);
-    ArrayList<Ingredient> ingredients = recipe.getIngredients();
+    ArrayList<DtoIngredient> ingredients = recipe.getIngredients();
 
     IngredientsAdapter ingredientsAdapter = new IngredientsAdapter(getActivity(), ingredients);
     ingredientRv.setAdapter(ingredientsAdapter);
     ingredientRv.setNestedScrollingEnabled(false);
 
-    initializePlayer(Uri.parse(recipe.getSteps().get(0).getVideoURL()));
+    initializePlayer(Uri.parse(recipe.getDtoSteps().get(0).getVideoURL()));
     return view;
   }
 
@@ -110,10 +112,10 @@ import java.util.ArrayList;
     releasePlayer();
   }
 
-  public static Fragment newInstance(Step step, Recipe recipe, int position) {
+  public static Fragment newInstance(DtoStep dtoStep, DtoRecipe recipe, int position) {
     RecipeBaseFragment recipeBaseFragment = new RecipeBaseFragment();
     Bundle args = new Bundle();
-    args.putParcelable(Constants.STEP_PARCELABLE, step);
+    args.putParcelable(Constants.STEP_PARCELABLE, dtoStep);
     args.putParcelable(Constants.RECIPE_PARCELABLE, recipe);
     args.putInt(Constants.FRAGMENT_TAG, position);
     recipeBaseFragment.setArguments(args);
