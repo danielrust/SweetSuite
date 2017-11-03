@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.ui.recipes.MainActivity;
+import com.rustwebdev.sweetsuite.ui.recipes.RecipesActivity;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
@@ -17,7 +17,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
     //views.setTextViewText(R.id.appwidget_text, widgetText);
-    Intent in = new Intent(context, MainActivity.class);
+    Intent in = new Intent(context, RecipesActivity.class);
     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, in, PendingIntent.FLAG_UPDATE_CURRENT);
     views.setOnClickPendingIntent(R.id.widget_recipe_title, pendingIntent);
     views.setTextViewText(R.id.widget_recipe_title, "Hello Thersesm!");

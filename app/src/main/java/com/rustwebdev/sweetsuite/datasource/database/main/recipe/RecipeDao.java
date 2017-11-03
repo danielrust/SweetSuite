@@ -3,6 +3,7 @@ package com.rustwebdev.sweetsuite.datasource.database.main.recipe;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import java.util.List;
 
 @Dao public interface RecipeDao {
   @Insert long insertRecipe(Recipe recipe);
@@ -13,5 +14,5 @@ import android.arch.persistence.room.Query;
 
   @Query("DELETE FROM recipe") void deleteAll();
 
-  @Query("SELECT name FROM recipe") void getRecipeNames();
+  @Query("SELECT * FROM recipe") List<Recipe> getRecipeNames();
 }

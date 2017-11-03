@@ -8,14 +8,14 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
 import java.util.List;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
-  private final List<DtoRecipe> recipes;
+  private final List<Recipe> recipes;
   private final RecipeItemListener itemListener;
 
-  public RecipesAdapter(List<DtoRecipe> recipes, RecipeItemListener itemListener) {
+  public RecipesAdapter(List<Recipe> recipes, RecipeItemListener itemListener) {
     this.recipes = recipes;
     this.itemListener = itemListener;
   }
@@ -27,8 +27,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
   }
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    DtoRecipe recipe = recipes.get(position);
-    holder.recipeNameTv.setText(recipe.getName());
+    Recipe recipe = recipes.get(position);
+    holder.recipeNameTv.setText(recipe.name);
   }
 
   @Override public int getItemCount() {
@@ -47,12 +47,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     }
 
     @Override public void onClick(View view) {
-      DtoRecipe recipe = recipes.get(getAdapterPosition());
+      Recipe recipe = recipes.get(getAdapterPosition());
       this.itemListener.onRecipeClick(recipe);
     }
   }
 
   public interface RecipeItemListener {
-    void onRecipeClick(DtoRecipe recipe);
+    void onRecipeClick(Recipe recipe);
   }
 }

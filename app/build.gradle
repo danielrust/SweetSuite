@@ -68,7 +68,7 @@ dependencies {
   compile "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
   compile "io.reactivex.rxjava2:rxandroid:$rxjavaVersion"
 
-  // Dagger 2
-  implementation "com.google.dagger:dagger:${daggerVersion}"
-  annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+//  // Dagger 2
+//  implementation "com.google.dagger:dagger:${daggerVersion}"
+//  annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
 }

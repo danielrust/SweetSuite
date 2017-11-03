@@ -10,6 +10,6 @@ import android.arch.persistence.room.PrimaryKey;
   }
 
   @PrimaryKey(autoGenerate = true) int id;
-  String name;
-  String servings;
+  public String name;
+  public String servings;
 }

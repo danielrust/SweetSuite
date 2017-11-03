@@ -9,28 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import com.rustwebdev.sweetsuite.App;
-import com.rustwebdev.sweetsuite.Constants;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.datasource.database.main.MainDatabase;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.RecipeService;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
+import com.rustwebdev.sweetsuite.di.Injector;
 import com.rustwebdev.sweetsuite.idlingResource.RecipeIdlingResource;
 import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
-import java.util.ArrayList;
-import javax.inject.Inject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-  private static final String LOG_TAG = MainActivity.class.getSimpleName();
-  private ArrayList<DtoRecipe> recipeArrayList;
+public class RecipesActivity extends AppCompatActivity implements RecipesViewContract.View {
+  private static final String LOG_TAG = RecipesActivity.class.getSimpleName();
   private RecyclerView recyclerView;
-  @Inject RecipeService recipeService;
-  @Inject MainDatabase database;
-  @Inject RecipesPresenter recipesPresenter;
+  RecipesPresenter recipesPresenter;
   @Nullable private RecipeIdlingResource mSimpleIdlingResource;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -40,40 +29,41 @@ public class MainActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle("");
     recyclerView = findViewById(R.id.recipe_rv);
+    recipesPresenter = new RecipesPresenter(this, Injector.provideRecipeService(),
+        Injector.provideMainDatabase(getApplicationContext()));
     mSimpleIdlingResource = getIdlingResource();
-    ((App) getApplication()).getComponent().inject(this);
+    recipesPresenter.getRecipesFromDatabase();
   }
 
   @Override protected void onStart() {
     super.onStart();
     recipesPresenter.getRecipesFromWebservice();
-
   }
 
-  private void getRecipesFromJson() {
-    if (mSimpleIdlingResource != null) {
-      mSimpleIdlingResource.setIdleState(false);
-    }
-    recipeService.getRecipes().enqueue(new Callback<ArrayList<DtoRecipe>>() {
+  //private void getRecipesFromJson() {
+  //  if (mSimpleIdlingResource != null) {
+  //    mSimpleIdlingResource.setIdleState(false);
+  //  }
+  //  recipeService.getRecipes().enqueue(new Callback<ArrayList<DtoRecipe>>() {
+  //
+  //    @Override public void onResponse(@NonNull Call<ArrayList<DtoRecipe>> call,
+  //        @NonNull Response<ArrayList<DtoRecipe>> response) {
+  //      recipeArrayList = response.body();
+  //
+  //      if (mSimpleIdlingResource != null) {
+  //        mSimpleIdlingResource.setIdleState(true);
+  //        configureLayout();
+  //      }
+  //    }
+  //
+  //    @Override
+  //    public void onFailure(@NonNull Call<ArrayList<DtoRecipe>> call, @NonNull Throwable t) {
+  //      Log.d(LOG_TAG, "Retrofit has failed. " + t);
+  //    }
+  //  });
+  //}
 
-      @Override public void onResponse(@NonNull Call<ArrayList<DtoRecipe>> call,
-          @NonNull Response<ArrayList<DtoRecipe>> response) {
-        recipeArrayList = response.body();
-
-        if (mSimpleIdlingResource != null) {
-          mSimpleIdlingResource.setIdleState(true);
-          configureLayout();
-        }
-      }
-
-      @Override
-      public void onFailure(@NonNull Call<ArrayList<DtoRecipe>> call, @NonNull Throwable t) {
-        Log.d(LOG_TAG, "Retrofit has failed. " + t);
-      }
-    });
-  }
-
-  private void configureLayout() {
+  public void configureLayout(List<Recipe> recipeArrayList) {
     RecipesAdapter recipesAdapter = new RecipesAdapter(recipeArrayList, itemListener);
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -83,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
   private final RecipesAdapter.RecipeItemListener itemListener =
       new RecipesAdapter.RecipeItemListener() {
-        @Override public void onRecipeClick(DtoRecipe recipe) {
-          Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-          intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
+        @Override public void onRecipeClick(Recipe recipe) {
+          Intent intent = new Intent(RecipesActivity.this, RecipeActivity.class);
+          //intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
           startActivity(intent);
         }
       };
@@ -97,5 +87,9 @@ public class MainActivity extends AppCompatActivity {
       mSimpleIdlingResource = new RecipeIdlingResource();
       return mSimpleIdlingResource;
     }
+  }
+
+  @Override public void showRecipes(List<Recipe> recipes) {
+    configureLayout(recipes);
   }
 }

@@ -1,5 +1,6 @@
 package com.rustwebdev.sweetsuite.ui.recipes;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import com.rustwebdev.sweetsuite.datasource.database.main.MainDatabase;
 import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.Ingredient;
@@ -18,26 +19,28 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecipesPresenter {
   private static final String LOG_TAG = RecipesPresenter.class.getSimpleName();
-  private final RecipeService recipeService;
-  private final RecipeDao recipeDao;
-  private final MainDatabase mainDatabase;
-  private final StepDao stepDao;
-  private final IngredientDao ingredientDao;
 
-  @Inject RecipesPresenter(RecipeService recipeService, RecipeDao recipeDao,
-      MainDatabase mainDatabase, StepDao stepDao, IngredientDao ingredientDao) {
+  public final RecipeService recipeService;
+  RecipeDao recipeDao;
+  MainDatabase mainDatabase;
+  StepDao stepDao;
+  IngredientDao ingredientDao;
+  public final RecipesViewContract.View recipesView;
+
+  public RecipesPresenter(RecipesViewContract.View recipesView, RecipeService recipeService,
+      MainDatabase mainDatabase) {
     this.recipeService = recipeService;
-    this.recipeDao = recipeDao;
+    this.recipesView = recipesView;
+    this.stepDao = mainDatabase.stepDao();
+    this.recipeDao = mainDatabase.recipeDao();
+    this.ingredientDao = mainDatabase.ingredientDao();
     this.mainDatabase = mainDatabase;
-    this.stepDao = stepDao;
-    this.ingredientDao = ingredientDao;
   }
 
   public void getRecipesFromWebservice() {
@@ -89,5 +92,21 @@ public class RecipesPresenter {
     mainDatabase.setTransactionSuccessful();
     mainDatabase.endTransaction();
   }
+
+  public void getRecipesFromDatabase() {
+    new GetRecipesFromDatabaseTask().execute();
+  }
+
+  private class GetRecipesFromDatabaseTask extends AsyncTask<Void, Void, List<Recipe>> {
+
+    @Override protected List<Recipe> doInBackground(Void... voids) {
+      return recipeDao.getRecipeNames();
+    }
+
+    @Override protected void onPostExecute(List<Recipe> recipes) {
+      recipesView.showRecipes(recipes);
+    }
+  }
+
 }
 

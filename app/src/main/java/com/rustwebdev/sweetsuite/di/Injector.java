@@ -1,20 +1,34 @@
 package com.rustwebdev.sweetsuite.di;
 
-
-import android.app.Application;
+import android.arch.persistence.room.Room;
+import android.content.Context;
+import com.rustwebdev.sweetsuite.Constants;
+import com.rustwebdev.sweetsuite.datasource.database.main.MainDatabase;
+import com.rustwebdev.sweetsuite.datasource.webservice.recipes.RecipeService;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Injector {
-  // AppComponent may need to be init() from either App, Service or Receiver and must be the same instance (leave as AppComponent?)
-  private static AppComponent appComponent;
 
-  public static void init(Application app) {
-    if (appComponent == null) {
-      appComponent = DaggerAppComponent.builder().appModule(new AppModule(app)).build();
-    }
+  private static Retrofit provideRetrofit() {
+    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+    logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
+    OkHttpClient client = new OkHttpClient.Builder().addInterceptor(logging).build();
+
+    return new Retrofit.Builder().baseUrl(Constants.BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build();
   }
 
-  public static AppComponent get() throws IllegalStateException {
-    return appComponent;
+  public static RecipeService provideRecipeService() {
+    return provideRetrofit().create(RecipeService.class);
   }
 
+  public static MainDatabase provideMainDatabase(Context context) {
+    return Room.databaseBuilder(context, MainDatabase.class, MainDatabase.DATABASE_NAME).build();
+  }
 }

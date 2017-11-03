@@ -6,7 +6,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.rustwebdev.sweetsuite.ui.recipes.MainActivity;
+import com.rustwebdev.sweetsuite.ui.recipes.RecipesActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,8 +25,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class) public class MainActivityScreenTest {
   private static final String RECIPE_NAME = "Nutella Pie";
-  @Rule public final ActivityTestRule<MainActivity> mActivityTestRule =
-      new ActivityTestRule<>(MainActivity.class);
+  @Rule public final ActivityTestRule<RecipesActivity> mActivityTestRule =
+      new ActivityTestRule<>(RecipesActivity.class);
   private IdlingResource mIdlingResource;
 
   @Before public void registerIdlingResource() {
