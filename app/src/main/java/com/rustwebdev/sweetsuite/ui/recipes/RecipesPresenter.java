@@ -23,22 +23,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecipesPresenter {
+class RecipesPresenter {
   private static final String LOG_TAG = RecipesPresenter.class.getSimpleName();
 
-  public final RecipeService recipeService;
-  RecipeDao recipeDao;
-  MainDatabase mainDatabase;
-  StepDao stepDao;
-  IngredientDao ingredientDao;
-  public final RecipesViewContract.View recipesView;
+  private final RecipeService recipeService;
+  private static RecipeDao recipeDao;
+  private final MainDatabase mainDatabase;
+  private final StepDao stepDao;
+  private final IngredientDao ingredientDao;
+  private static RecipesViewContract.View recipesView;
 
   public RecipesPresenter(RecipesViewContract.View recipesView, RecipeService recipeService,
       MainDatabase mainDatabase) {
     this.recipeService = recipeService;
-    this.recipesView = recipesView;
+    RecipesPresenter.recipesView = recipesView;
     this.stepDao = mainDatabase.stepDao();
-    this.recipeDao = mainDatabase.recipeDao();
+    recipeDao = mainDatabase.recipeDao();
     this.ingredientDao = mainDatabase.ingredientDao();
     this.mainDatabase = mainDatabase;
   }
@@ -97,7 +97,7 @@ public class RecipesPresenter {
     new GetRecipesFromDatabaseTask().execute();
   }
 
-  private class GetRecipesFromDatabaseTask extends AsyncTask<Void, Void, List<Recipe>> {
+  private static class GetRecipesFromDatabaseTask extends AsyncTask<Void, Void, List<Recipe>> {
 
     @Override protected List<Recipe> doInBackground(Void... voids) {
       return recipeDao.getRecipeNames();

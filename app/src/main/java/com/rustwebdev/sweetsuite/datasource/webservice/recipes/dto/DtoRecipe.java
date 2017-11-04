@@ -14,11 +14,6 @@ public class DtoRecipe implements Parcelable {
   @SerializedName("steps") @Expose private List<DtoStep> steps ;
   @SerializedName("servings") @Expose private final String servings;
 
-  public DtoRecipe(String name, String servings) {
-    this.name = name;
-    this.servings = servings;
-  }
-
   public String getName() {
     return name;
   }

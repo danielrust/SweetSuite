@@ -42,8 +42,6 @@ import java.util.ArrayList;
   public static final String LOG_TAG = RecipeActivity.class.getSimpleName();
   private SimpleExoPlayer mExoPlayer;
   private SimpleExoPlayerView mPlayerView;
-  private Step step;
-  private ArrayList<Ingredient> ingredients;
   @BindView(R.id.recipe_name) TextView recipeName;
   @BindView(R.id.servings_tv) TextView servingsAmount;
   private Unbinder unbinder;
@@ -54,8 +52,9 @@ import java.util.ArrayList;
     View view = inflater.inflate(R.layout.recipe_base_fragment, container, false);
     unbinder = ButterKnife.bind(this, view);
     Recipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
-    ingredients = getArguments().getParcelableArrayList(Constants.INGREDIENTS_PARCELABLE);
-    step = getArguments().getParcelable(Constants.STEP_PARCELABLE);
+    ArrayList<Ingredient> ingredients =
+        getArguments().getParcelableArrayList(Constants.INGREDIENTS_PARCELABLE);
+    Step step = getArguments().getParcelable(Constants.STEP_PARCELABLE);
     assert recipe != null;
     recipeName.setText(recipe.name);
     servingsAmount.setText(getActivity().getString(R.string.servings_amount_tv, recipe.servings));
@@ -74,6 +73,7 @@ import java.util.ArrayList;
     ingredientRv.setAdapter(ingredientsAdapter);
     ingredientRv.setNestedScrollingEnabled(false);
 
+    assert step != null;
     initializePlayer(Uri.parse(step.videoURL));
     return view;
   }

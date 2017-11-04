@@ -7,7 +7,7 @@ import android.widget.RemoteViewsService;
 
 
 public class ListRemoteViewService implements RemoteViewsService.RemoteViewsFactory {
-  Context mContext;
+  final Context mContext;
   Cursor mCursor;
 
   public ListRemoteViewService(Context mContext) {

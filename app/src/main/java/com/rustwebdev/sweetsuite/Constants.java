@@ -13,7 +13,6 @@ public class Constants {
   public static final String VIEW_PAGER_POSITION = "position";
 
   public static final String INGREDIENTS_PARCELABLE = "ingredients";
-  public static final String INGREDIENTS_STEPS = "steps";
 
   public static final String INGREDIENTS_ARRAY = "ingredient_array";
   public static final String STEPS_ARRAY = "steps_array";

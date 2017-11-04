@@ -12,8 +12,8 @@ import android.os.Parcelable;
   }
 
   @PrimaryKey(autoGenerate = true) public int id;
-  public String name;
-  public String servings;
+  public final String name;
+  public final String servings;
 
   @Override public int describeContents() {
     return 0;

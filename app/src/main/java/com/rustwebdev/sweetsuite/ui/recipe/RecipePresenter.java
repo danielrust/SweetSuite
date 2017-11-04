@@ -16,17 +16,17 @@ import java.util.List;
 class RecipePresenter {
   private static final String LOG_TAG = RecipePresenter.class.getSimpleName();
 
-  RecipeDao recipeDao;
-  MainDatabase mainDatabase;
-  StepDao stepDao;
-  IngredientDao ingredientDao;
-  public final RecipeViewContract.View recipeView;
+  private final RecipeDao recipeDao;
+  private final MainDatabase mainDatabase;
+  private static StepDao stepDao;
+  private static IngredientDao ingredientDao;
+  private static RecipeViewContract.View recipeView;
 
   public RecipePresenter(RecipeViewContract.View recipeView, MainDatabase mainDatabase) {
-    this.recipeView = recipeView;
-    this.stepDao = mainDatabase.stepDao();
+    RecipePresenter.recipeView = recipeView;
+    stepDao = mainDatabase.stepDao();
     this.recipeDao = mainDatabase.recipeDao();
-    this.ingredientDao = mainDatabase.ingredientDao();
+    ingredientDao = mainDatabase.ingredientDao();
     this.mainDatabase = mainDatabase;
   }
 
@@ -38,7 +38,7 @@ class RecipePresenter {
     new GetIngredientsFromDatabaseTask().execute(id);
   }
 
-  private class GetStepsFromDatabaseTask extends AsyncTask<Long, Void, List<Step>> {
+  private static class GetStepsFromDatabaseTask extends AsyncTask<Long, Void, List<Step>> {
 
     @Override protected List<Step> doInBackground(Long... longs) {
       return stepDao.getSteps(longs[0]);
@@ -49,7 +49,8 @@ class RecipePresenter {
     }
   }
 
-  private class GetIngredientsFromDatabaseTask extends AsyncTask<Long, Void, List<Ingredient>> {
+  private static class GetIngredientsFromDatabaseTask
+      extends AsyncTask<Long, Void, List<Ingredient>> {
 
     @Override protected List<Ingredient> doInBackground(Long... longs) {
       return ingredientDao.getIngredients(longs[0]);

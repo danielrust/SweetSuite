@@ -14,10 +14,10 @@ import android.os.Parcelable;
   }
 
   @PrimaryKey(autoGenerate = true) public int id;
-  long recipe_id;
-  public String quantity;
-  public String measure;
-  public String ingredient;
+  final long recipe_id;
+  public final String quantity;
+  public final String measure;
+  public final String ingredient;
 
   @Override public int describeContents() {
     return 0;

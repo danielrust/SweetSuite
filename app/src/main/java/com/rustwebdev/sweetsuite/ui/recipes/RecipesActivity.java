@@ -20,7 +20,7 @@ import java.util.List;
 public class RecipesActivity extends AppCompatActivity implements RecipesViewContract.View {
   private static final String LOG_TAG = RecipesActivity.class.getSimpleName();
   private RecyclerView recyclerView;
-  RecipesPresenter recipesPresenter;
+  private RecipesPresenter recipesPresenter;
   @Nullable private RecipeIdlingResource mSimpleIdlingResource;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +38,21 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
 
   @Override protected void onStart() {
     super.onStart();
+    if (mSimpleIdlingResource != null) {
+      mSimpleIdlingResource.setIdleState(false);
+    }
     recipesPresenter.getRecipesFromWebservice();
   }
 
   //private void getRecipesFromJson() {
-  //  if (mSimpleIdlingResource != null) {
-  //    mSimpleIdlingResource.setIdleState(false);
-  //  }
+
   //  recipeService.getRecipes().enqueue(new Callback<ArrayList<DtoRecipe>>() {
   //
   //    @Override public void onResponse(@NonNull Call<ArrayList<DtoRecipe>> call,
   //        @NonNull Response<ArrayList<DtoRecipe>> response) {
   //      recipeArrayList = response.body();
   //
-  //      if (mSimpleIdlingResource != null) {
-  //        mSimpleIdlingResource.setIdleState(true);
-  //        configureLayout();
-  //      }
+
   //    }
   //
   //    @Override
@@ -64,7 +62,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
   //  });
   //}
 
-  public void configureLayout(List<Recipe> recipeArrayList) {
+  private void configureLayout(List<Recipe> recipeArrayList) {
     RecipesAdapter recipesAdapter = new RecipesAdapter(recipeArrayList, itemListener);
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -91,6 +89,9 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
   }
 
   @Override public void showRecipes(List<Recipe> recipes) {
+    if (mSimpleIdlingResource != null) {
+      mSimpleIdlingResource.setIdleState(true);
+    }
     configureLayout(recipes);
   }
 }

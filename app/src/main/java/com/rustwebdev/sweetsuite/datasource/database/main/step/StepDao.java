@@ -6,7 +6,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 @Dao public interface StepDao {
-  @Insert long insertStep(Step step);
+  @Insert void insertStep(Step step);
 
   @Query("SELECT * FROM step WHERE recipe_id = :id") List<Step> getSteps(long id);
 }

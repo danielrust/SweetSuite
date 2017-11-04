@@ -16,14 +16,14 @@ import android.os.Parcelable;
   }
 
   @PrimaryKey(autoGenerate = true) public int id;
-  long recipe_id;
-  public String shortDescription;
+  public final long recipe_id;
+  public final String shortDescription;
 
-  public String description;
+  public final String description;
 
-  public String videoURL;
+  public final String videoURL;
 
-  public String thumbnailURL;
+  public final String thumbnailURL;
 
   protected Step(Parcel in) {
     id = in.readInt();
