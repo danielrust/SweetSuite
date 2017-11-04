@@ -5,34 +5,37 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoStep;
-import com.rustwebdev.sweetsuite.recipe.RecipeFragment;
+import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.Ingredient;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
+import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipePagerAdapter extends FragmentStatePagerAdapter {
-  private final DtoRecipe recipe;
-  private final ArrayList<DtoStep> dtoSteps;
+  private final Recipe recipe;
+  private final ArrayList<Step> steps;
+  private final ArrayList<Ingredient> ingredients;
   private final SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-  public RecipePagerAdapter(FragmentManager fm, DtoRecipe recipe) {
+  public RecipePagerAdapter(FragmentManager fm, Recipe recipe, List<Step> steps,
+      List<Ingredient> ingredients) {
     super(fm);
-    this.dtoSteps = (ArrayList<DtoStep>) recipe.getDtoSteps();
     this.recipe = recipe;
+    this.ingredients = (ArrayList<Ingredient>) ingredients;
+    this.steps = (ArrayList<Step>) steps;
   }
 
   @Override public Fragment getItem(int position) {
     Fragment fragment;
     if (position == 0) {
-      fragment = RecipeBaseFragment.newInstance(dtoSteps.get(position), recipe, position);
+      fragment = RecipeBaseFragment.newInstance(steps.get(position),recipe, position, ingredients);
     } else {
-      fragment = RecipeFragment.newInstance(dtoSteps.get(position), position);
-    }
-    return fragment;
+      fragment = RecipeFragment.newInstance(steps.get(position), position);
+    } return fragment;
   }
 
   @Override public int getCount() {
-    return dtoSteps.size();
+    return steps.size();
   }
 
   @Override public Object instantiateItem(ViewGroup container, int position) {

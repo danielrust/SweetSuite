@@ -22,5 +22,7 @@
   <string name="servings_amount_tv">SERVINGS: %1$s</string>
   <string name="appwidget_text">Recipe Name</string>
   <string name="add_widget">Add widget</string>
+  <string name="widget_back_nav_content_desc">Back Navigation Arrow</string>
+  <string name="widget_forward_nav_content_desc">Widget Forward Navigation</string>
 
 </resources>

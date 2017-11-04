@@ -9,15 +9,15 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoIngredient;
+import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.ViewHolder> {
-  private final List<DtoIngredient> ingredients;
+  private final List<Ingredient> ingredients;
   private final Context context;
 
-  public IngredientsAdapter(Context context, ArrayList<DtoIngredient> ingredients) {
+  public IngredientsAdapter(Context context, ArrayList<Ingredient> ingredients) {
     this.context = context;
     this.ingredients = ingredients;
   }
@@ -29,10 +29,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
   }
 
   @Override public void onBindViewHolder(ViewHolder holder, int position) {
-    DtoIngredient ingredient = ingredients.get(position);
+    Ingredient ingredient = ingredients.get(position);
     holder.ingredientNameTv.setText(
-        context.getString(R.string.ingredient_name_tv_text, ingredient.getQuantity(),
-            ingredient.getMeasure(), ingredient.getIngredient()));
+        context.getString(R.string.ingredient_name_tv_text, ingredient.quantity,
+            ingredient.measure, ingredient.ingredient));
   }
 
   @Override public int getItemCount() {

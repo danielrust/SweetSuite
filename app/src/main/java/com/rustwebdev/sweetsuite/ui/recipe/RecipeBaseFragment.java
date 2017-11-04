@@ -32,10 +32,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.rustwebdev.sweetsuite.Constants;
 import com.rustwebdev.sweetsuite.R;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoIngredient;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoRecipe;
-import com.rustwebdev.sweetsuite.datasource.webservice.recipes.dto.DtoStep;
-import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
+import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.Ingredient;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
+import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
 import java.util.ArrayList;
 
 @SuppressWarnings("WeakerAccess") public class RecipeBaseFragment extends BaseRecipeFragment
@@ -43,6 +42,8 @@ import java.util.ArrayList;
   public static final String LOG_TAG = RecipeActivity.class.getSimpleName();
   private SimpleExoPlayer mExoPlayer;
   private SimpleExoPlayerView mPlayerView;
+  private Step step;
+  private ArrayList<Ingredient> ingredients;
   @BindView(R.id.recipe_name) TextView recipeName;
   @BindView(R.id.servings_tv) TextView servingsAmount;
   private Unbinder unbinder;
@@ -52,11 +53,12 @@ import java.util.ArrayList;
       @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.recipe_base_fragment, container, false);
     unbinder = ButterKnife.bind(this, view);
-    DtoRecipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
+    Recipe recipe = getArguments().getParcelable(Constants.RECIPE_PARCELABLE);
+    ingredients = getArguments().getParcelableArrayList(Constants.INGREDIENTS_PARCELABLE);
+    step = getArguments().getParcelable(Constants.STEP_PARCELABLE);
     assert recipe != null;
-    recipeName.setText(recipe.getName());
-    servingsAmount.setText(
-        getActivity().getString(R.string.servings_amount_tv, recipe.getServings()));
+    recipeName.setText(recipe.name);
+    servingsAmount.setText(getActivity().getString(R.string.servings_amount_tv, recipe.servings));
     RecyclerView ingredientRv = view.findViewById(R.id.ingredient_recyclerView);
     mPlayerView = view.findViewById(R.id.playerView);
     //noinspection ConstantConditions
@@ -67,13 +69,12 @@ import java.util.ArrayList;
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     ingredientRv.setLayoutManager(mLayoutManager);
-    ArrayList<DtoIngredient> ingredients = recipe.getIngredients();
 
     IngredientsAdapter ingredientsAdapter = new IngredientsAdapter(getActivity(), ingredients);
     ingredientRv.setAdapter(ingredientsAdapter);
     ingredientRv.setNestedScrollingEnabled(false);
 
-    initializePlayer(Uri.parse(recipe.getDtoSteps().get(0).getVideoURL()));
+    initializePlayer(Uri.parse(step.videoURL));
     return view;
   }
 
@@ -112,11 +113,13 @@ import java.util.ArrayList;
     releasePlayer();
   }
 
-  public static Fragment newInstance(DtoStep dtoStep, DtoRecipe recipe, int position) {
+  public static Fragment newInstance(Step step, Recipe recipe, int position,
+      ArrayList<Ingredient> ingredients) {
     RecipeBaseFragment recipeBaseFragment = new RecipeBaseFragment();
     Bundle args = new Bundle();
-    args.putParcelable(Constants.STEP_PARCELABLE, dtoStep);
+    args.putParcelable(Constants.STEP_PARCELABLE, step);
     args.putParcelable(Constants.RECIPE_PARCELABLE, recipe);
+    args.putParcelableArrayList(Constants.INGREDIENTS_PARCELABLE, ingredients);
     args.putInt(Constants.FRAGMENT_TAG, position);
     recipeBaseFragment.setArguments(args);
     return recipeBaseFragment;

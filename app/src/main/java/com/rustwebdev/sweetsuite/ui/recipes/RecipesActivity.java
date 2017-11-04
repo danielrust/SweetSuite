@@ -9,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import com.rustwebdev.sweetsuite.Constants;
 import com.rustwebdev.sweetsuite.R;
 import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
 import com.rustwebdev.sweetsuite.di.Injector;
 import com.rustwebdev.sweetsuite.idlingResource.RecipeIdlingResource;
-import com.rustwebdev.sweetsuite.recipe.RecipeActivity;
+import com.rustwebdev.sweetsuite.ui.recipe.RecipeActivity;
 import java.util.List;
 
 public class RecipesActivity extends AppCompatActivity implements RecipesViewContract.View {
@@ -75,7 +76,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
       new RecipesAdapter.RecipeItemListener() {
         @Override public void onRecipeClick(Recipe recipe) {
           Intent intent = new Intent(RecipesActivity.this, RecipeActivity.class);
-          //intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
+          intent.putExtra(Constants.RECIPE_PARCELABLE, recipe);
           startActivity(intent);
         }
       };
