@@ -20,10 +20,11 @@ import java.util.ArrayList;
 public class RecipeWidgetProvider extends AppWidgetProvider {
   private static final String LOG_TAG = RecipeWidgetProvider.class.getSimpleName();
   private static final String CHANGE_NAV_BACKWARD = "buttonclickchangenavbackward";
-  public static int currentRecipe = 0;
-  public static final String CHANGE_NAV_FORWARD = "buttonclickchangenavforward";
+  private static int currentRecipe = 0;
+  private static final String CHANGE_NAV_FORWARD = "buttonclickchangenavforward";
 
-  static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+  private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+      int appWidgetId) {
     MainDatabase mainDatabase = Injector.provideSynchronousMainDatabase(context);
     RecipeDao recipeDao = mainDatabase.recipeDao();
     ArrayList<Recipe> recipes = (ArrayList<Recipe>) recipeDao.getRecipeNames();

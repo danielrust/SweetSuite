@@ -27,12 +27,10 @@ public class ListRemoteViewService extends RemoteViewsService {
 
 class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
   private static final String LOG_TAG = ListRemoteViewService.class.getSimpleName();
-  int currentRecipe;
-  ArrayList<Recipe> recipes;
-  ArrayList<Ingredient> ingredients;
-  private RecipeDao recipeDao;
-  private IngredientDao ingredientDao;
-  private Context context;
+  private final int currentRecipe;
+  private ArrayList<Recipe> recipes;
+  private ArrayList<Ingredient> ingredients;
+  private final Context context;
 
   public ListRemoteViewsFactory(Context applicationContext, int currentRecipe) {
     this.context = applicationContext;
@@ -44,10 +42,10 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
   @Override public void onDataSetChanged() {
     MainDatabase mainDatabase = Injector.provideSynchronousMainDatabase(context);
-    recipeDao = mainDatabase.recipeDao();
+    RecipeDao recipeDao = mainDatabase.recipeDao();
     recipes = (ArrayList<Recipe>) recipeDao.getRecipeNames();
 
-    ingredientDao = mainDatabase.ingredientDao();
+    IngredientDao ingredientDao = mainDatabase.ingredientDao();
     ingredients =
         (ArrayList<Ingredient>) ingredientDao.getIngredients(recipes.get(currentRecipe).id);
     Log.d(LOG_TAG, ingredients.toString());

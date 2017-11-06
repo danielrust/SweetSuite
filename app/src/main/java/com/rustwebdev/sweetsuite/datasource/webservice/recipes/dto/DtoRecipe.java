@@ -10,8 +10,8 @@ import java.util.List;
 public class DtoRecipe implements Parcelable {
 
   @SerializedName("name") @Expose private final String name;
-  @SerializedName("ingredients") @Expose private ArrayList<DtoIngredient> ingredients;
-  @SerializedName("steps") @Expose private List<DtoStep> steps ;
+  @SerializedName("ingredients") @Expose private final ArrayList<DtoIngredient> ingredients;
+  @SerializedName("steps") @Expose private final List<DtoStep> steps ;
   @SerializedName("servings") @Expose private final String servings;
 
   public String getName() {
@@ -41,7 +41,7 @@ public class DtoRecipe implements Parcelable {
     dest.writeString(servings);
   }
 
-  public DtoRecipe(Parcel in) {
+  private DtoRecipe(Parcel in) {
     name = in.readString();
     ingredients = in.createTypedArrayList(DtoIngredient.CREATOR);
     steps = in.createTypedArrayList(DtoStep.CREATOR);

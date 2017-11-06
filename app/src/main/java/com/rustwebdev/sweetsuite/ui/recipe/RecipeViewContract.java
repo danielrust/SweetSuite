@@ -8,7 +8,7 @@ import java.util.List;
  * Created by flanhelsinki on 11/3/17.
  */
 
-public interface RecipeViewContract {
+interface RecipeViewContract {
   interface View {
     void returnSteps(List<Step> steps);
 

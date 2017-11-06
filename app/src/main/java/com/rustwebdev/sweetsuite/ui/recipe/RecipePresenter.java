@@ -11,11 +11,9 @@ import java.util.List;
 
 
 
-public class RecipePresenter {
+class RecipePresenter {
   private static final String LOG_TAG = RecipePresenter.class.getSimpleName();
 
-  private final RecipeDao recipeDao;
-  private final MainDatabase mainDatabase;
   private static StepDao stepDao;
   private static IngredientDao ingredientDao;
   private static RecipeViewContract.View recipeView;
@@ -23,9 +21,9 @@ public class RecipePresenter {
   public RecipePresenter(RecipeViewContract.View recipeView, MainDatabase mainDatabase) {
     RecipePresenter.recipeView = recipeView;
     stepDao = mainDatabase.stepDao();
-    this.recipeDao = mainDatabase.recipeDao();
+    RecipeDao recipeDao = mainDatabase.recipeDao();
     ingredientDao = mainDatabase.ingredientDao();
-    this.mainDatabase = mainDatabase;
+    MainDatabase mainDatabase1 = mainDatabase;
   }
 
   public void getSteps(long id) {

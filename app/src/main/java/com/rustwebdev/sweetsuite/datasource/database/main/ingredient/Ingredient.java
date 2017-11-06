@@ -14,7 +14,7 @@ import android.os.Parcelable;
   }
 
   @PrimaryKey(autoGenerate = true) public int id;
-  final long recipe_id;
+  public final long recipe_id;
   public final String quantity;
   public final String measure;
   public final String ingredient;

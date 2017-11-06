@@ -11,7 +11,7 @@ import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipePagerAdapter extends FragmentStatePagerAdapter {
+class RecipePagerAdapter extends FragmentStatePagerAdapter {
   private final Recipe recipe;
   private final ArrayList<Step> steps;
   private final ArrayList<Ingredient> ingredients;
