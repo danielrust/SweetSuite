@@ -6,6 +6,6 @@ import java.util.List;
 interface RecipesViewContract {
   interface View {
     void showRecipes(List<Recipe> movies);
-    void updateRecipes();
+
   }
 }

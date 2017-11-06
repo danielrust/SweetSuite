@@ -9,10 +9,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.rustwebdev.sweetsuite.R;
 import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
-  private final List<Recipe> recipes;
+  private List<Recipe> recipes;
   private final RecipeItemListener itemListener;
 
   public RecipesAdapter(List<Recipe> recipes, RecipeItemListener itemListener) {
@@ -54,5 +55,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
   public interface RecipeItemListener {
     void onRecipeClick(Recipe recipe);
+  }
+  public void changedData(ArrayList<Recipe> recipes){
+    this.recipes = recipes;
+    notifyDataSetChanged();
   }
 }
