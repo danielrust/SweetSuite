@@ -25,7 +25,8 @@
     </activity>
     <activity
         android:name=".ui.recipe.RecipeActivity"
-        android:parentActivityName=".ui.recipes.RecipesActivity"/>
+        android:parentActivityName=".ui.recipes.RecipesActivity"
+        />
 
     <receiver android:name=".ui.widget.RecipeWidgetProvider">
       <intent-filter>

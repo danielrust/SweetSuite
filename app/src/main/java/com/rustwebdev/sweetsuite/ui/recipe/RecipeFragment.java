@@ -12,18 +12,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -33,7 +28,7 @@ import com.rustwebdev.sweetsuite.R;
 import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
 
 @SuppressWarnings("WeakerAccess") public class RecipeFragment extends BaseRecipeFragment
-    implements RecipeActivity.OnFragmentChangeState, ExoPlayer.EventListener {
+    implements RecipeActivity.OnFragmentChangeState {
   public static final String LOG_TAG = RecipeFragment.class.getSimpleName();
   private SimpleExoPlayer mExoPlayer;
   private SimpleExoPlayerView mPlayerView;
@@ -76,7 +71,6 @@ import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
       mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
       mPlayerView.setPlayer(mExoPlayer);
 
-      mExoPlayer.addListener(this);
 
       String userAgent = Util.getUserAgent(getActivity(), "SweetSuite");
       MediaSource mediaSource =
@@ -114,28 +108,5 @@ import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
     }
   }
 
-  @Override public void onTimelineChanged(Timeline timeline, Object manifest) {
 
-  }
-
-  @Override
-  public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-  }
-
-  @Override public void onLoadingChanged(boolean isLoading) {
-
-  }
-
-  @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-  }
-
-  @Override public void onPlayerError(ExoPlaybackException error) {
-
-  }
-
-  @Override public void onPositionDiscontinuity() {
-
-  }
 }

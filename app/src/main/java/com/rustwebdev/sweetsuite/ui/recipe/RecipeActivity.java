@@ -51,6 +51,7 @@ import java.util.List;
         ingredients = savedInstanceState.getParcelableArrayList(Constants.INGREDIENTS_ARRAY);
         steps = savedInstanceState.getParcelableArrayList(Constants.STEPS_ARRAY);
       }
+      configureLayout();
     } else {
       recipePresenter.getSteps(recipe.id);
     }
