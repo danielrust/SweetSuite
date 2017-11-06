@@ -31,4 +31,10 @@ public class Injector {
   public static MainDatabase provideMainDatabase(Context context) {
     return Room.databaseBuilder(context, MainDatabase.class, MainDatabase.DATABASE_NAME).build();
   }
+
+  public static MainDatabase provideSynchronousMainDatabase(Context context) {
+    return Room.databaseBuilder(context, MainDatabase.class, MainDatabase.DATABASE_NAME)
+        .allowMainThreadQueries()
+        .build();
+  }
 }

@@ -1,25 +1,56 @@
 package com.rustwebdev.sweetsuite.ui.widget;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import com.rustwebdev.sweetsuite.Constants;
+import com.rustwebdev.sweetsuite.R;
+import com.rustwebdev.sweetsuite.datasource.database.main.MainDatabase;
+import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.Ingredient;
+import com.rustwebdev.sweetsuite.datasource.database.main.ingredient.IngredientDao;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.Recipe;
+import com.rustwebdev.sweetsuite.datasource.database.main.recipe.RecipeDao;
+import com.rustwebdev.sweetsuite.di.Injector;
+import java.util.ArrayList;
 
+public class ListRemoteViewService extends RemoteViewsService {
+  private static final String LOG_TAG = ListRemoteViewService.class.getSimpleName();
 
-public class ListRemoteViewService implements RemoteViewsService.RemoteViewsFactory {
-  final Context mContext;
-  Cursor mCursor;
+  @Override public RemoteViewsFactory onGetViewFactory(Intent intent) {
+    Log.d(LOG_TAG, String.valueOf(intent.getIntExtra(Constants.APP_WIDGET_CURRENT_POSITION, 0)));
+    int currentPosition = intent.getIntExtra(Constants.APP_WIDGET_CURRENT_POSITION, 0);
+    return new ListRemoteViewsFactory(this.getApplicationContext(), currentPosition);
+  }
+}
 
-  public ListRemoteViewService(Context mContext) {
-    this.mContext = mContext;
+class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+  private static final String LOG_TAG = ListRemoteViewService.class.getSimpleName();
+  int currentRecipe;
+  ArrayList<Recipe> recipes;
+  ArrayList<Ingredient> ingredients;
+  private RecipeDao recipeDao;
+  private IngredientDao ingredientDao;
+  private Context context;
+
+  public ListRemoteViewsFactory(Context applicationContext, int currentRecipe) {
+    this.context = applicationContext;
+    this.currentRecipe = currentRecipe;
   }
 
   @Override public void onCreate() {
-
   }
 
   @Override public void onDataSetChanged() {
+    MainDatabase mainDatabase = Injector.provideSynchronousMainDatabase(context);
+    recipeDao = mainDatabase.recipeDao();
+    recipes = (ArrayList<Recipe>) recipeDao.getRecipeNames();
 
+    ingredientDao = mainDatabase.ingredientDao();
+    ingredients =
+        (ArrayList<Ingredient>) ingredientDao.getIngredients(recipes.get(currentRecipe).id);
+    Log.d(LOG_TAG, ingredients.toString());
   }
 
   @Override public void onDestroy() {
@@ -27,11 +58,21 @@ public class ListRemoteViewService implements RemoteViewsService.RemoteViewsFact
   }
 
   @Override public int getCount() {
-    return 0;
+    if (ingredients == null) {
+      return 0;
+    } else {
+      return ingredients.size();
+    }
   }
 
   @Override public RemoteViews getViewAt(int position) {
-    return null;
+    RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredient_list_item);
+    rv.setTextViewText(R.id.ingredient_tv, ingredients.get(position).quantity
+        + " "
+        + ingredients.get(position).measure
+        + " "
+        + ingredients.get(position).ingredient);
+    return rv;
   }
 
   @Override public RemoteViews getLoadingView() {
@@ -39,14 +80,14 @@ public class ListRemoteViewService implements RemoteViewsService.RemoteViewsFact
   }
 
   @Override public int getViewTypeCount() {
-    return 0;
+    return 1;
   }
 
   @Override public long getItemId(int position) {
-    return 0;
+    return position;
   }
 
   @Override public boolean hasStableIds() {
-    return false;
+    return true;
   }
 }

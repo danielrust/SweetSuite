@@ -44,24 +44,6 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
     recipesPresenter.getRecipesFromWebservice();
   }
 
-  //private void getRecipesFromJson() {
-
-  //  recipeService.getRecipes().enqueue(new Callback<ArrayList<DtoRecipe>>() {
-  //
-  //    @Override public void onResponse(@NonNull Call<ArrayList<DtoRecipe>> call,
-  //        @NonNull Response<ArrayList<DtoRecipe>> response) {
-  //      recipeArrayList = response.body();
-  //
-
-  //    }
-  //
-  //    @Override
-  //    public void onFailure(@NonNull Call<ArrayList<DtoRecipe>> call, @NonNull Throwable t) {
-  //      Log.d(LOG_TAG, "Retrofit has failed. " + t);
-  //    }
-  //  });
-  //}
-
   private void configureLayout(List<Recipe> recipeArrayList) {
     RecipesAdapter recipesAdapter = new RecipesAdapter(recipeArrayList, itemListener);
     RecyclerView.LayoutManager mLayoutManager =

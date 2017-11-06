@@ -16,4 +16,7 @@ public class Constants {
 
   public static final String INGREDIENTS_ARRAY = "ingredient_array";
   public static final String STEPS_ARRAY = "steps_array";
+
+  public static final String APP_WIDGET_CURRENT_POSITION = "current";
+  public static final String POSITION_INCREMENT = "position-increment" ;
 }

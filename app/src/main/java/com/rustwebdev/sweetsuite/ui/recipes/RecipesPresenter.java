@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class RecipesPresenter {
+public class RecipesPresenter {
   private static final String LOG_TAG = RecipesPresenter.class.getSimpleName();
 
   private final RecipeService recipeService;

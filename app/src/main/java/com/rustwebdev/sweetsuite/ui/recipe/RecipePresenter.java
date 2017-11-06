@@ -9,11 +9,9 @@ import com.rustwebdev.sweetsuite.datasource.database.main.step.Step;
 import com.rustwebdev.sweetsuite.datasource.database.main.step.StepDao;
 import java.util.List;
 
-/**
- * Created by flanhelsinki on 11/3/17.
- */
 
-class RecipePresenter {
+
+public class RecipePresenter {
   private static final String LOG_TAG = RecipePresenter.class.getSimpleName();
 
   private final RecipeDao recipeDao;

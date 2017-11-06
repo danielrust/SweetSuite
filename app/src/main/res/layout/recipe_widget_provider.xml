@@ -1,9 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:windowBackground"
     android:padding="@dimen/widget_margin"
-    android:id="@+id/widget_ll"
+    android:orientation="vertical"
     >
 
   <LinearLayout
@@ -18,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_arrow_back_black_24dp"
         android:contentDescription="@string/widget_back_nav_content_desc"
+        android:src="@drawable/ic_arrow_back_black_24dp"
         />
     <TextView
         android:id="@+id/widget_recipe_title"
@@ -39,15 +41,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_arrow_forward_black_24dp"
         android:contentDescription="@string/widget_forward_nav_content_desc"
+        android:src="@drawable/ic_arrow_forward_black_24dp"
         />
   </LinearLayout>
-  <ListView
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      tools:listitem="@layout/ingredient_list_item"
-      />
+      >
+    <ListView
+        android:id="@+id/widget_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/ingredient_list_item"
+        />
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
+  </FrameLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
