@@ -16,6 +16,7 @@ import com.rustwebdev.sweetsuite.datasource.database.main.recipe.RecipeDao;
 import com.rustwebdev.sweetsuite.di.Injector;
 import com.rustwebdev.sweetsuite.ui.recipe.RecipeActivity;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
   private static final String LOG_TAG = RecipeWidgetProvider.class.getSimpleName();
@@ -85,7 +86,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
   @Override public void onReceive(Context context, Intent intent) {
     super.onReceive(context, intent);
 
-    if (intent.getAction() == CHANGE_NAV_FORWARD) {
+    if (Objects.equals(intent.getAction(), CHANGE_NAV_FORWARD)) {
       if (currentRecipe == 3) {
         currentRecipe = 0;
       } else {
@@ -97,7 +98,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
       int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
       this.onUpdate(context, appWidgetManager, appWidgetIds);
-    } else if (intent.getAction() == CHANGE_NAV_BACKWARD) {
+    } else if (Objects.equals(intent.getAction(), CHANGE_NAV_BACKWARD)) {
       if (currentRecipe == 0) {
         currentRecipe = 3;
       } else {

@@ -91,7 +91,9 @@ class RecipesPresenter {
     }
     mainDatabase.setTransactionSuccessful();
     mainDatabase.endTransaction();
+    getRecipesFromDatabase();
   }
+
 
   public void getRecipesFromDatabase() {
     new GetRecipesFromDatabaseTask().execute();

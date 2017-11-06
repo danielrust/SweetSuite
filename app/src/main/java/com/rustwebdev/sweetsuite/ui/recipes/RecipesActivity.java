@@ -22,6 +22,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
   private RecyclerView recyclerView;
   private RecipesPresenter recipesPresenter;
   @Nullable private RecipeIdlingResource mSimpleIdlingResource;
+  private RecipesAdapter recipesAdapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,7 +34,10 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
     recipesPresenter = new RecipesPresenter(this, Injector.provideRecipeService(),
         Injector.provideMainDatabase(getApplicationContext()));
     mSimpleIdlingResource = getIdlingResource();
-    recipesPresenter.getRecipesFromDatabase();
+    if(savedInstanceState != null){
+      recipesPresenter.getRecipesFromDatabase();
+    }
+    recipesPresenter.getRecipesFromWebservice();
   }
 
   @Override protected void onStart() {
@@ -41,11 +45,10 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
     if (mSimpleIdlingResource != null) {
       mSimpleIdlingResource.setIdleState(false);
     }
-    recipesPresenter.getRecipesFromWebservice();
   }
 
   private void configureLayout(List<Recipe> recipeArrayList) {
-    RecipesAdapter recipesAdapter = new RecipesAdapter(recipeArrayList, itemListener);
+    recipesAdapter = new RecipesAdapter(recipeArrayList, itemListener);
     RecyclerView.LayoutManager mLayoutManager =
         new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
     recyclerView.setLayoutManager(mLayoutManager);
@@ -75,5 +78,9 @@ public class RecipesActivity extends AppCompatActivity implements RecipesViewCon
       mSimpleIdlingResource.setIdleState(true);
     }
     configureLayout(recipes);
+  }
+
+  @Override public void updateRecipes() {
+
   }
 }
