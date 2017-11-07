@@ -1,6 +1,10 @@
 package com.rustwebdev.sweetsuite;
 
-public class Constants {
+public final class Constants {
+  private Constants(){
+    throw new AssertionError("No Constants Instances for you!");
+
+  }
   public static final String BASE_URL =
       "http://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
 
